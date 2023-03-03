@@ -15,18 +15,33 @@
         animation-fill-mode: forwards;
       }
 
+      #decorative-element {
+        width: 800px;
+        height: 800px;
+        background: linear-gradient(#e6646563, #9198e538);
+        border-radius: 50%;
+/*         position: absolute; */
+/*         margin: auto; */
+      }
+
       body {
         text-align: center;
         font-family: "Trebuchet MS", sans-serif;
         font-size: 17px;
         color: rgba(0, 0, 0, 0.5);
+        align-items: center;
+        justify-content: center;
+/*         background-color: red */
+/*         margin: auto;
+        width: 500px; */
       }
 
       .txt {
         max-width: 600px;
         display: inline-block;
         line-height: 25px;
-        text-align: justify;
+        text-align: center;
+/*         background-color: red; */
       }
 
       img {
@@ -53,12 +68,13 @@
         font-size: 20px;
         position: sticky;
         top: 20px;
-/*         font-family: "Courier", sans-serif; */
+        /*         font-family: "Courier", sans-serif; */
         text-align: end;
         background-color: rgba(255, 255, 255, 0.65);
         line-height: 40px;
         text-shadow: 0px 0px 20px white;
       }
+
       a {
         color: gray;
         text-decoration: none;
@@ -80,7 +96,18 @@
       Contact
     </h1>
     <div class="txt">
+      
       email: <a href="mailto: takararts@gmail.com">takararts@gmail.com</a>
     </div>
+    <div id="decorative-element"></div>
+    <script>
+      const element = document.getElementById("decorative-element");
+
+      let angle = 0;
+      setInterval(() => {
+        angle += 12;
+        element.style.transform = `rotate(${angle}deg)`;
+      }, 50);
+    </script>
   </body>
 </html>
