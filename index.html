@@ -20,8 +20,12 @@
         height: 800px;
         background: linear-gradient(#e6646563, #9198e538);
         border-radius: 50%;
-/*         position: absolute; */
-/*         margin: auto; */
+        /*         position: absolute; */
+        /*         margin: auto; */
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
       }
 
       body {
@@ -31,8 +35,8 @@
         color: rgba(0, 0, 0, 0.5);
         align-items: center;
         justify-content: center;
-/*         background-color: red */
-/*         margin: auto;
+        /*         background-color: red */
+        /*         margin: auto;
         width: 500px; */
       }
 
@@ -41,7 +45,7 @@
         display: inline-block;
         line-height: 25px;
         text-align: center;
-/*         background-color: red; */
+        /*         background-color: red; */
       }
 
       img {
@@ -85,6 +89,7 @@
       }
     </style>
   </head>
+  <div id="decorative-element"></div>
   <body>
     <div class="headers">
       <a href="https://takaramarina.github.io/marina/">home</a>
@@ -96,18 +101,61 @@
       Contact
     </h1>
     <div class="txt">
-      
+
       email: <a href="mailto: takararts@gmail.com">takararts@gmail.com</a>
     </div>
-    <div id="decorative-element"></div>
-    <script>
-      const element = document.getElementById("decorative-element");
 
-      let angle = 0;
-      setInterval(() => {
-        angle += 12;
-        element.style.transform = `rotate(${angle}deg)`;
-      }, 50);
+<!--     used chatGPT for a lot of the script code -->
+<!--     surprisingly didn't use any sound libraries? -->
+    <script>
+      const circle = document.getElementById("decorative-element");
+
+      // create an audio context
+      const audioContext = new AudioContext();
+
+      // create a media stream source node from the microphone
+      navigator.mediaDevices.getUserMedia({
+          audio: true
+        })
+        .then(stream => {
+          const source = audioContext.createMediaStreamSource(stream);
+
+          // create a analyzer node
+          const analyzer = audioContext.createAnalyser();
+
+          // connect the nodes
+          source.connect(analyzer);
+          analyzer.connect(audioContext.destination);
+
+          // set the size of the analyzer
+          analyzer.fftSize = 256;
+
+          // create a buffer for the data
+          const bufferLength = analyzer.frequencyBinCount;
+          const dataArray = new Uint8Array(bufferLength);
+
+          // set the animation loop
+          function renderFrame() {
+            requestAnimationFrame(renderFrame);
+
+            // get the data from the analyzer
+            analyzer.getByteFrequencyData(dataArray);
+
+            // calculate the average amplitude of the sound
+            const amplitude = dataArray.reduce((acc, cur) => acc + cur, 0) / bufferLength;
+
+            // set the size and color of the circle based on the amplitude
+            circle.style.width = `${amplitude * 6}px`;
+            circle.style.height = `${amplitude * 6}px`;
+            // circle.style.backgroundColor = `rgb(${amplitude}, ${amplitude}, ${amplitude})`;
+          }
+
+          // start the animation loop
+          renderFrame();
+        })
+        .catch(error => {
+          console.log(error);
+        });
     </script>
   </body>
 </html>
